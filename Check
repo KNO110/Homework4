@@ -1,0 +1,78 @@
+///Структура Check представляет чек, который содержит список товаров Product. 
+///Каждый товар представлен в структуре Product, где хранятся его наименование, количество, цена за единицу и скидочка. 
+///Функция AddProduct добавляет информацию о товаре в чек, а функция PrintCheck распечатывает чек на экране консоли(ну типо), 
+///включая информацию о каждом товаре и общую сумму.
+
+
+using System;
+using System.Collections.Generic;
+
+struct Product
+{
+    public string Name;
+    public int Quantity;
+    public decimal PricePerUnit;            ///децимал ибо он даёт десятичные числа с фиксированной точностью, типо 128 бит для хранения числа, вроде для финансов лучше флоата
+    public decimal Discount;
+}
+
+struct Check
+{
+    public List<Product> Products; 
+
+    // Конструктор для инициализации нового чеееека
+    public Check()
+    {
+        Products = new List<Product>();
+    }
+
+    // Функция для добавления информации о товаре в чек( к сожалению цена тоже)
+    public void AddProduct(string name, int quantity, decimal pricePerUnit, decimal discount)
+    {
+        Product product = new Product
+        {
+            Name = name,
+            Quantity = quantity,
+            PricePerUnit = pricePerUnit,
+            Discount = discount
+        };
+        Products.Add(product);
+    }
+
+    // Функция для распечатки чека на экране консоли(ну не а4, но тоже норм)
+    public void PrintCheck()
+    {
+        decimal total = 0;
+
+        Console.WriteLine("====== Чеееек ======");
+        foreach (Product product in Products)
+        {
+            decimal totalPrice = (product.PricePerUnit - product.Discount) * product.Quantity;
+            total += totalPrice;
+
+            Console.WriteLine($"Товар: {product.Name}");
+            Console.WriteLine($"Количество: {product.Quantity}");
+            Console.WriteLine($"Цена за единицу: {product.PricePerUnit}");
+            Console.WriteLine($"Скидка: {product.Discount}");
+            Console.WriteLine($"В итоге за товар: {totalPrice}");
+            Console.WriteLine();
+        }
+
+        Console.WriteLine($"Общая сумма: {total}");
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+ 
+        Check check = new Check();
+
+
+        check.AddProduct("Огурец", 2, 1.7M, 0.2M);
+        check.AddProduct("Помидорчики черри", 3, 2.0M, 0.0M);
+
+
+        check.PrintCheck();
+    }
+}
